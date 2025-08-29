@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Event
+from .models import Action
 
-class EventSerializer(serializers.ModelSerializer):
+class ActionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
+        model = Action
         fields = ['id', 'action', 'date', 'points']

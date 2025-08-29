@@ -1,6 +1,6 @@
 from django.db import models
 
-class Event(models.Model):
+class Action(models.Model):
     action = models.CharField(max_length=255)
     date = models.DateField()
     points = models.IntegerField()
