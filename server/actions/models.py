@@ -1,6 +1,6 @@
 from django.db import models
 
-class Action(models.Model):
+class Action(models.Model): # format of action object
     action = models.CharField(max_length=255)
     date = models.DateField()
     points = models.IntegerField()

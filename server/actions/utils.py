@@ -1,12 +1,17 @@
 from .models import Action
 
-def get(id:int):
-    return Action.objects.get(id=id)
+# backend request functions
 
 def post(action:str, date, points:int):
     return Action.objects.create(action=action, date=date, points=points)
 
-def put(id:int, **kwargs):
+def getall():
+    return Action.objects.all()
+
+def get(id:int):
+    return Action.objects.get(id=id)
+
+def put(id:int, **kwargs): # kwargs allow user to update any fields
     action = get(id)
     
     if "action" in kwargs:
