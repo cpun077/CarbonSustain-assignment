@@ -1,3 +1,5 @@
+# LOAD SOME BASE DATA INTO DB, TEST UTIL METHODS
+
 import requests
 
 BASE_URL = "http://127.0.0.1:8000/api/actions/"

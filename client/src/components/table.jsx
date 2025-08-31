@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useState, useEffect } from 'react';
-import { getall } from '../requesthandler';
+import { getall, put, get } from '../requesthandler';
 
 const columns = [
     {field: 'id', headerName: 'ID', width: 90},
@@ -67,19 +67,21 @@ function EnhancedTableToolbar(props) {
 const Grid = () => {
     const [rows, setRows] = useState(initialrow)
     const [selectedRows, setSelectedRows] = useState({ ids: new Set(), type: 'include' });
-    const [editing, setEditing] = useState(false);
 
     useEffect(() => { // updates selected rows state
         console.log(selectedRows)
     }, [selectedRows])
 
-    useEffect(() => { // updates when editing has stopped
-        if (editing == false) {
-            console.log('save')
-        }
-    }, [editing])
+    const putRow = async (changedRow) => { // handle edited row
+            try {
+                const response = await put(changedRow)
+                return response.data
+            } catch(error) {
+                console.log(error)
+            }
+    }
 
-    useEffect(() => { // get rows from db
+    useEffect(() => { // get all rows from db at first render
         const fetchRows = async () => {
             try {
                 const response = await getall()
@@ -113,7 +115,8 @@ const Grid = () => {
                 onRowSelectionModelChange={
                     (rows) => {setSelectedRows(rows)}
                 }
-                onCellEditStop={() => console.log("BYE")}
+                processRowUpdate={putRow}
+                onProcessRowUpdateError={(error) => console.log(error)}
             />
         </div>
     )
