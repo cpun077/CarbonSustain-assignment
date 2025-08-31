@@ -15,6 +15,3 @@
   height: 6em;
   padding: 0.5em;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 1.5em green);
-}
