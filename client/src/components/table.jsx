@@ -1,125 +1,94 @@
 import { DataGrid } from '@mui/x-data-grid'
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-
 import { useState, useEffect } from 'react';
-import { getall, put, get } from '../requesthandler';
+import { getall, put, get, post } from '../requesthandler';
+import PopupForm from './popupform';
+import EnhancedTableToolbar from './enhancedtabletoolbar';
+import './table.css'
 
 const columns = [
-    {field: 'id', headerName: 'ID', width: 90},
-    {field: 'action', headerName: 'Action', width: 200, editable: true},
-    {field: 'date', headerName: 'Date', width: 150, editable: true},
-    {field: 'points', headerName: 'Points', width: 90, editable: true},
+    { field: 'id', headerName: 'ID', flex: .1 },
+    { field: 'action', headerName: 'Action', flex: .55, editable: true },
+    { field: 'date', headerName: 'Date', flex: .2, editable: true },
+    { field: 'points', headerName: 'Points', flex: .15, editable: true },
 ]
 
 const initialrow = [
-    {id: -1, action: "Shenanigans", date: "9999-99-99", points: 67},
+    { id: -1, action: "Shenanigans", date: "9999-99-99", points: 67 },
 ]
 
-function EnhancedTableToolbar(props) {
-  const { rows } = props;
-  const size = rows['ids'].size;
-  
-  return (
-    <Toolbar
-      sx={[
-        {
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-        },
-        size > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        },
-      ]}
-    >
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Action Log
-        </Typography>
-      {size > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
-
-const Grid = () => {
+const DataTable = () => {
     const [rows, setRows] = useState(initialrow)
     const [selectedRows, setSelectedRows] = useState({ ids: new Set(), type: 'include' });
+    const [openForm, setOpenForm] = useState(false);
 
     useEffect(() => { // updates selected rows state
         console.log(selectedRows)
     }, [selectedRows])
 
     const putRow = async (changedRow) => { // handle edited row
-            try {
-                const response = await put(changedRow)
-                return response.data
-            } catch(error) {
-                console.log(error)
-            }
+        try {
+            const response = await put(changedRow)
+            return response.data
+        } catch (error) {
+            console.log(error)
+        }
     }
 
-    useEffect(() => { // get all rows from db at first render
+    useEffect(() => { // get all rows from db at start
         const fetchRows = async () => {
             try {
                 const response = await getall()
                 setRows(response.data)
-            } catch(error) {
+            } catch (error) {
                 console.log(error)
             }
         }
         fetchRows()
     }, [])
 
+    const openPopup = () => { // pass handler to toolbar component
+        setOpenForm(true)
+    }
+
+    const closePopup = () => { // pass handler to form component
+        setOpenForm(false)
+    }
+
+    const addRow = async (row) => {
+        try {
+            const response = await post(row)
+            setRows(prevRows => [...prevRows, response.data])
+            setOpenForm(false)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const delRows = () => {
+        console.log("del rows!")
+    }
+
     return (
-        <div>
-            <EnhancedTableToolbar rows={selectedRows}/>
+        <div className='tablecontainer'>
+            <EnhancedTableToolbar selectedRows={selectedRows} openPopup={openPopup} delRows={delRows} />
             <DataGrid
                 rows={rows}
                 columns={columns}
-                initialState={{
-                pagination: {
-                    paginationModel: {
-                    pageSize: 5,
-                    },
-                },
-                }}
-                pageSizeOptions={[5]}
+                sx={ {flex: 1} }
                 disableRowSelectionOnClick
 
                 /* Selection props for delete functionality */
                 checkboxSelection
                 rowSelectionModel={selectedRows}
                 onRowSelectionModelChange={
-                    (rows) => {setSelectedRows(rows)}
+                    (rows) => { setSelectedRows(rows) }
                 }
                 processRowUpdate={putRow}
                 onProcessRowUpdateError={(error) => console.log(error)}
             />
+            <PopupForm open={openForm} closePopup={closePopup} addRow={addRow} />
         </div>
     )
 }
 
-export default Grid
+export default DataTable
