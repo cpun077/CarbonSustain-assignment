@@ -5,7 +5,7 @@ A full-stack web application designed to help users track and manage their susta
 - React, Axios, MaterialUI
 - Django, Django Rest Framework (DRF)
 
-<div style="text-align: center;">
+<div align="center"">
 <img src="./client/public/screenshot.png" alt="Project Screenshot" width="600">
 </div>
 
