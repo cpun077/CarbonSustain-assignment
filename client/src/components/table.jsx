@@ -93,7 +93,12 @@ const DataTable = () => {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                sx={ {flex: 1} }
+                sx={{
+                    flex: 1,
+                    '& .MuiDataGrid-columnHeader': {
+                        backgroundColor: 'darkseagreen',
+                    },
+                }}
                 disableRowSelectionOnClick
 
                 /* Selection props for delete functionality */

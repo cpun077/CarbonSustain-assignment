@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 function EnhancedTableToolbar(props) {
     const { selectedRows, openPopup, delRows } = props;
-    const size = selectedRows['ids'].size;
+    const selected = (selectedRows.ids.size == 0  && selectedRows.type == 'include') ? false : true
 
     return (
         <Toolbar
@@ -17,21 +17,21 @@ function EnhancedTableToolbar(props) {
                     pl: { sm: 2 },
                     pr: { xs: 1, sm: 1 },
                 },
-                size > 0 && {
+                selected && {
                     bgcolor: (theme) =>
                         alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                 },
             ]}
         >
             <Typography
-                sx={{ flex: '1 1 100%' }}
+                sx={{ flex: '1 1 100%', color: 'black' }}
                 variant="h6"
                 id="tableTitle"
                 component="div"
             >
                 <strong>Action Log</strong>
             </Typography>
-            {size > 0 ? (
+            {selected ? (
                 <Tooltip title="Delete">
                     <IconButton onClick={delRows}>
                         <DeleteIcon />

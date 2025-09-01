@@ -46,7 +46,7 @@ const PopupForm = ({ open, closePopup, addRow }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker label='Date' onChange={(date) => setDate(date)} slotProps={{ textField: { required: true } }}/>
                     </LocalizationProvider>
-                    <Button variant='contained' color='success' type='submit'>Confirm</Button>
+                    <Button variant='contained' type='submit' sx={ {background: 'darkseagreen'} }>Confirm</Button>
                 </Stack>
             </form>
         </Dialog>

@@ -1,7 +1,8 @@
 // client side request functions
 
 import axios from 'axios'
-const BASE_URL = "http://127.0.0.1:8000/api/actions/"
+const server = "http://127.0.0.1:8000/"
+const BASE_URL = `${server}api/actions/`
 
 export async function getall() {
     try {
