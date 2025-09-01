@@ -12,6 +12,15 @@ export async function getall() {
     }
 }
 
+export async function post(row) {
+    try {
+        const response = await axios.post(BASE_URL, row);
+        return response
+    } catch (error) {
+        return error
+    }
+}
+
 export async function put(row) {
     try {
         const response = await axios.put(`${BASE_URL}${row.id}/`, row)
@@ -30,11 +39,11 @@ export async function get(id) {
     }
 }
 
-export async function post(row) {
+export async function del(id) {
     try {
-        const response = await axios.post(BASE_URL, row);
+        const response = await axios.delete(`${BASE_URL}${id}/`)
         return response
     } catch (error) {
-        return error
+
     }
 }
