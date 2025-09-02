@@ -48,3 +48,5 @@ Navigate to the `src` folder and open `requesthandler.jsx`. Change the `server` 
 ```javascript
     const server = "http://127.0.0.1:8000/" // make sure this value matches your server
 ```
+
+**Note: Postman collection in root project folder as `Action Log.postman_collection.json`**.
